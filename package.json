@@ -2,10 +2,9 @@
   "name": "reactn",
   "version": "1.0.0",
   "description": "",
-  
   "scripts": {
-    "start":"parcel index.html",
-    "build":"parcel build index.html",
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
     "test": "jest"
   },
   "keywords": [
@@ -16,12 +15,13 @@
   "dependencies": {
     "parcel": "^2.13.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
     "process": "^0.11.10"
   },
-  "browserlist":[
+  "browserlist": [
     "last 5 version"
   ]
 }
