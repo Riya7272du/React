@@ -1,36 +1,35 @@
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
+import ResCategory from "./ResCategory";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
 
 const RestaurantMenu = () => {
     const { resId } = useParams();
     const resInfo = useRestaurantMenu(resId);
     if (resInfo === 0) return <Shimmer />
+    // console.log(resInfo);
 
-    const { name, cuisines, costForTwoMessage } = resInfo?.cards?.[2]?.card?.card?.info || {};
+    const { name, cuisines, costForTwoMessage } = resInfo?.cards[2]?.card?.card?.info || {};
     const itemCards =
-        resInfo?.cards?.[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.[1]?.card?.card?.itemCards || [];
-    // console.log(itemCards);
+        resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card?.itemCards || [];
+    // console.log(resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards);
+
+    const categories = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(c => c.card?.card?.["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory");
+    // console.log(categories);
 
     return (
-        <div className="menu">
-            <h1>{name || "Restaurant Name"}</h1>
-            <h3>{cuisines?.join(", ") || "Cuisines not available"}</h3>
-            <h3>{costForTwoMessage || "Cost details not available"}</h3>
-            <h2>Menu</h2>
-            <ul>
-                {itemCards.length > 0 ? (
-                    itemCards.map((item) => (
-                        <li key={item?.card?.info?.id}>
-                            {item?.card?.info?.name || "Unnamed Item"} - ₹{(item?.card?.info?.price || 0) / 100}
-                        </li>
-                    ))
-                ) : (
-                    <li>No menu items available</li>
-                )}
-            </ul>
-
+        <div className="text-center">
+            <h1 className="font-bold my-6 text-2xl">{name || "Restaurant Name"}</h1>
+            <p className="font-bold my-4 text-xl">{cuisines?.join(", ") || "Cuisines not available"}</p>
+            {Array.isArray(categories) && categories.length > 0 ? (
+                categories.map((category, index) => (
+                    <ResCategory key={index} data={category?.card?.card} />
+                ))
+            ) : (
+                <p>No categories available</p>
+            )}
         </div>
+
     )
 }
 

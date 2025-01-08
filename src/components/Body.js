@@ -1,4 +1,4 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import resList from "../utils/mockData";
 import Shimmer from "./Shimmer";
@@ -11,8 +11,9 @@ const Body = () => {
     // const [listOfRestaurant, setListOfRestaurant] = useState(resList);
     const [listOfRestaurant, setListOfRestaurant] = useState([]);
     const [filteredRestaurant, setfilteredRestaurant] = useState([]);
-
     const [searchText, setsearchText] = useState("");
+    const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
+    // console.log(listOfRestaurant);
 
     // Normal JS Variable
     // let listOfRestaurant = [
@@ -38,7 +39,7 @@ const Body = () => {
     // ];
 
     useEffect(() => {
-        fetchData();
+        fetchData()
     }, []);
 
 
@@ -96,7 +97,7 @@ const Body = () => {
                         //Filter logic
                         const filteredList = listOfRestaurant.filter((res) => res.info.avgRating > 4.5);
                         setfilteredRestaurant(filteredList);
-                        // console.log(listOfRestaurant);
+
 
                     }
                     }>
@@ -110,7 +111,10 @@ const Body = () => {
                         <Link
                             key={restaurant.info.id}
                             to={"/restaurants/" + restaurant.info.id}>
-                            <RestaurantCard resData={restaurant} />
+                            {restaurant.info.isOpen ? (
+                                <RestaurantCardPromoted resData={restaurant} />) :
+                                (<RestaurantCard resData={restaurant} />)
+                            }
                         </Link>)
                     )
                 }
