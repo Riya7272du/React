@@ -1,11 +1,14 @@
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 import ResCategory from "./ResCategory";
-import useRestaurantMenu from "../utils/useRestaurantMenu";
+import useRestaurantMenu from "./utils/useRestaurantMenu";
+import { useState } from "react";
 
 const RestaurantMenu = () => {
     const { resId } = useParams();
     const resInfo = useRestaurantMenu(resId);
+
+    const [showIndex, setshowIndex] = useState(null);
     if (resInfo === 0) return <Shimmer />
     // console.log(resInfo);
 
@@ -23,7 +26,14 @@ const RestaurantMenu = () => {
             <p className="font-bold my-4 text-xl">{cuisines?.join(", ") || "Cuisines not available"}</p>
             {Array.isArray(categories) && categories.length > 0 ? (
                 categories.map((category, index) => (
-                    <ResCategory key={index} data={category?.card?.card} />
+                    //controlled components
+                    <ResCategory
+                        key={category?.card?.card.title}
+                        data={category?.card?.card}
+                        showItems={index === showIndex ? true : false}
+                        setshowIndex={() => setshowIndex(index)}
+                    />
+
                 ))
             ) : (
                 <p>No categories available</p>
